@@ -97,3 +97,8 @@ func AddPermenantField(key string, value string) {
 	callerInfo := getCallerInfo(1)
 	GetPackageConfig(callerInfo.Package).PermanentFields[key] = value
 }
+
+func SetPackageLogLevel(l Level) {
+	callerInfo := getCallerInfo(1)
+	GetPackageConfig(callerInfo.Package).Level = l
+}

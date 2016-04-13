@@ -5,8 +5,6 @@ type Level struct {
 	Priority int
 }
 
-const ColorDefault string = "\033[1;37m"
-
 var LevelDebug Level = Level{"DEBUG", 0}
 var LevelInfo Level = Level{"INFO", 1}
 var LevelWarn Level = Level{"WARN", 2}

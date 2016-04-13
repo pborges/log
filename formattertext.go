@@ -8,6 +8,7 @@ import (
 
 func NewTextFormatter() *TextFormatter {
 	t := new(TextFormatter)
+	t.DefaultColor = "\033[1;37m"
 	t.UseColor = true
 	t.ColorMap = make(map[Level]string)
 	t.ColorMap[LevelDebug] = "\033[0;34m"
@@ -19,15 +20,16 @@ func NewTextFormatter() *TextFormatter {
 }
 
 type TextFormatter struct {
-	UseColor bool
-	ColorMap map[Level]string
+	UseColor     bool
+	DefaultColor string
+	ColorMap     map[Level]string
 }
 
 func (this *TextFormatter)Format(entry Entry) (string) {
 	var defaultColor, color string
 	if this.UseColor {
 		color = this.ColorMap[entry.Level]
-		defaultColor = ColorDefault
+		defaultColor = this.DefaultColor
 	}
 	entry.prependField("msg", entry.Msg)
 	entry.WithField("package", entry.Package)
