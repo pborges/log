@@ -32,7 +32,7 @@ func (this *TextFormatter)Format(entry Entry) (string) {
 		defaultColor = this.DefaultColor
 	}
 	entry.prependField("msg", entry.Msg)
-	entry.WithField("package", entry.Package)
+	entry.WithField("pkg", entry.Package)
 	entry.WithField("func", entry.Func)
 	entry.WithField("file", entry.Filename + ":" + strconv.Itoa(entry.Line))
 
