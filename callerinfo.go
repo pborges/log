@@ -16,14 +16,17 @@ type callerInfo struct {
 func getCallerInfo(callSkip int) (callerInfo) {
 	pc, file, line, _ := runtime.Caller(callSkip + 1) // plus one is to account for itself
 
-	parts := strings.Split(runtime.FuncForPC(pc).Name(), ".")
+	rawPackage := runtime.FuncForPC(pc).Name()
+	rawPackage = strings.Replace(rawPackage, "(*", "", -1)
+	rawPackage = strings.Replace(rawPackage, ")", "", -1)
+
+	parts := strings.Split(rawPackage, ".")
 	pl := len(parts)
 
 	funcStartOffset := pl - 1
 	if _, err := strconv.Atoi(parts[funcStartOffset]); err == nil && pl >= 2 {
 		funcStartOffset--
 	}
-
 	return callerInfo{
 		File:file,
 		Line:line,
