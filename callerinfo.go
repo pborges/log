@@ -6,14 +6,14 @@ import (
 	"strconv"
 )
 
-type callerInfo struct {
+type CallerInfo struct {
 	File    string
 	Line    int
 	Package string
 	Func    string
 }
 
-func getCallerInfo(callSkip int) (callerInfo) {
+func getCallerInfo(callSkip int) (CallerInfo) {
 	pc, file, line, _ := runtime.Caller(callSkip + 1) // plus one is to account for itself
 
 	rawPackage := runtime.FuncForPC(pc).Name()
@@ -27,7 +27,7 @@ func getCallerInfo(callSkip int) (callerInfo) {
 	if _, err := strconv.Atoi(parts[funcStartOffset]); err == nil && pl >= 2 {
 		funcStartOffset--
 	}
-	return callerInfo{
+	return CallerInfo{
 		File:file,
 		Line:line,
 		Package:strings.Join(parts[:funcStartOffset], "."),
