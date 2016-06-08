@@ -7,6 +7,21 @@ import (
 	"os"
 )
 
+var logTmpl = `
+{{- $entry := . -}}
+{{ $entry.ColorDefault }}[{{ $entry.ColorHighlight }}{{ fmt_pad .Level.String 5 }}{{ $entry.ColorDefault }}] {{ $entry.ColorSubtle }}{{ $entry.TimeStamp }}{{ $entry.ColorDefault }} {{ $entry.Msg }}
+    {{ $entry.ColorHighlight }}File{{ $entry.ColorSubtle }}:  {{ $entry.File }}:{{ $entry.Line }}
+    {{ $entry.ColorHighlight }}Pkg{{ $entry.ColorSubtle }}:   {{ $entry.Package }}
+    {{ $entry.ColorHighlight }}Func{{ $entry.ColorSubtle }}:  {{ $entry.Func }}
+{{- if $entry.Err}}
+    {{ $entry.ColorHighlight }}Error{{ $entry.ColorSubtle }}: {{ $entry.ColorError }}{{ $entry.Err }}{{ $entry.ColorDefault }}
+{{- end }}
+{{- range $idx, $key := $entry.Keys }}
+    {{ $entry.ColorHighlight }}{{ $key }}{{ $entry.ColorDefault }}: {{ fmt_idx $entry.Values $idx }}
+{{- end }}
+
+`
+
 func NewEmitterText() (e *EmitterText) {
 	e = new(EmitterText)
 	e.Output = os.Stdout
@@ -23,7 +38,7 @@ func NewEmitterText() (e *EmitterText) {
 	}
 
 	var err error
-	e.Template, err = template.New("").Funcs(fm).ParseFiles("log.tmpl")
+	e.Template, err = template.New("entry").Funcs(fm).Parse(logTmpl)
 	if err != nil {
 		panic(err)
 	}
@@ -62,7 +77,7 @@ func (this *EmitterText)Emit(entry *Entry) {
 		model.ColorHighlight = "\033[0;31m"
 	}
 
-	err := this.Template.ExecuteTemplate(this.Output, "log.tmpl", model)
+	err := this.Template.ExecuteTemplate(this.Output, "entry", model)
 	if err != nil {
 		panic(err)
 	}
