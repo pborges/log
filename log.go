@@ -15,6 +15,10 @@ type Logger struct {
 	Level   Level
 }
 
+func (this *Logger)NewEntry() (*Entry) {
+	return Log.createEntry(3)
+}
+
 func (this *Logger)Debug(args... interface{}) {
 	entry := this.createEntry(3)
 	entry.Debug(args...)

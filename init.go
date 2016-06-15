@@ -6,6 +6,10 @@ func init() {
 	Log = New()
 }
 
+func NewEntry() (*Entry) {
+	return Log.NewEntry()
+}
+
 func Debug(args... interface{}) {
 	Log.Debug(args...)
 }
