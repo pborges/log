@@ -2,15 +2,18 @@ package log
 
 import (
 	"time"
+	"sync"
 )
 
 func New() (l *Logger) {
 	l = new(Logger)
 	l.Emitter = NewEmitterText()
+	l.Mutex = new(sync.Mutex)
 	return
 }
 
 type Logger struct {
+	*sync.Mutex
 	Emitter LogEmitter
 	Level   Level
 }
@@ -66,6 +69,8 @@ func (this *Logger)createEntry(callSkip int) (*Entry) {
 
 func (this *Logger)emit(entry *Entry) {
 	if entry.Level.Priority >= this.Level.Priority {
+		this.Lock()
+		defer this.Unlock()
 		this.Emitter.Emit(entry)
 	}
 }
