@@ -60,7 +60,7 @@ func (this *EmitterText)Emit(entry *Entry) {
 	}{
 		Entry:entry,
 		ColorDefault:"\033[1;37m",
-		ColorSubtle:"\033[1;30m",
+		ColorSubtle:"\033[1;37m",
 		ColorError:"\033[1;31m",
 	}
 
